@@ -1,39 +1,52 @@
-from flask import Flask
+from flask import Flask, request
+from caesar import rotate_string
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-"""<!DOCTYPE html>
+form = """
+
+<!DOCTYPE html>
 
 <html>
     <head>
         <style>
-            form {
+            form {{
                 background-color: #eee;
                 padding: 20px;
                 margin: 0 auto;
                 width: 540px;
                 font: 16px sans-serif;
                 border-radius: 10px;
-            }
-            textarea {
+            }}
+            textarea {{
                 margin: 10px 0;
                 width: 540px;
                 height: 120px;
-            }
+            }}
         </style>
     </head>
     <body>
-      <!-- create your form here -->
       <form action="?" method="POST">
-      <label for="rotate_box">Rotate by:</label>
-      <textarea name="text" type="text">
-      <input name="rot" type="number" value="0">
-      <button>Submit</button>
-      
+      <label>Rotate by:</label>
+      <input type="number" name="rot"  value="0">
+      <textarea name="text" type="text">{0}</textarea>
+      <input type="submit"</>
+    </form>
     </body>
-</html>"""
-@app.route("/")
+</html>
+"""
+@app.route("/") 
 def index():
-    return "Hello World"
+    return form.format("")
+
+@app.route("/", methods=['POST'])
+def encrypt():
+    rot = request.form['rot']
+    text = request.form['text']
+    thing = rotate_string(text, int(rot)) 
+    return "<h1>" + form.format(thing) + "</h1>"
+
+
+
 app.run()
